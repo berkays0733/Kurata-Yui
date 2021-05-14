@@ -27,7 +27,7 @@ jobs:
          continue-on-error: true
          timeout-minutes: 10
          run: |
-              git clone --recurse-submodules https://github.com/berkays0733/ErfanGSIs-TrebleExp ErfanGSIs
+              git clone --recurse-submodules https://github.com/berkays0733/ErfanGSIs ErfanGSIs
               cd Erf*; sudo apt-get --fix-broken install -y; sudo bash setup.sh
               sudo rm -rf /usr/share/dotnet/
               sudo rm -rf "/usr/local/share/boost"
