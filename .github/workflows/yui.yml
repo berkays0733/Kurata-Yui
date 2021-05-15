@@ -78,7 +78,6 @@ jobs:
               cd Bot3
               ./gradlew shadowJar
               cd ../; mv Bot3/build/libs/*.jar BoboBot.jar
-              rm -rf Bot3
               sudo java -jar BoboBot.jar
               
        - name: Reruns
