@@ -1,40 +1,26 @@
-name: Bot3
-
-on: push
-
-env:
-  TZ: America/Recife
-
-jobs:
-  build:
-    runs-on: ubuntu-20.04
-    timeout-minutes: 525600
-
-    steps:
-       - name: Checkouts
-         uses: actions/checkout@master
-
-       - name: Reclaiming disk space on / by disabling swap partition
-         run: |
-               sudo swapoff -av
-               sudo rm -f /swapfile
-
-       - name: Create swap (Avoid mk2fs issues)
-         run: |
-              sudo dd if=/dev/zero of=swap bs=4k count=1048576
-              sudo mkswap swap
-              sudo swapon swap
-
-       - name: Setup git Environment
+         continue-on-error: true
+         timeout-minutes: 100
          run: |
               git config --global user.name "berkays0733"
-              git config --global user.email "berkays0733@gmail.com"
-              git config --global pull.rebase false
-
-       - name: Setup Bobot Environment
+              git config --global user.email "secrets.EMAILGIT"
+              mkdir tmp && cd tmp
+              git clone https://github.com/berkays0733/Kurata-Yui Kurata-Yui
+       - name: Setup Erfan & Save Space
          continue-on-error: true
+         timeout-minutes: 10
          run: |
-              mkdir configs && cd configs
+              git clone --recurse-submodules https://github.com/berkays0733/ErfanGSIs ErfanGSIs
+              cd Erf*; sudo apt-get --fix-broken install -y; sudo bash setup.sh
+              sudo rm -rf /usr/share/dotnet/
+              sudo rm -rf "/usr/local/share/boost"
+	@@ -38,7 +38,7 @@ jobs:
+         continue-on-error: true
+         timeout-minutes: 10
+         run: |
+              git clone https://github.com/berkays0733/linuxshitbot Bobo
+              mv Bobo/*.jar .; rm -rf Bobo
+              mv *.jar BoboBot.jar
+	@@ -57,10 +57,10 @@ jobs:
               touch config.prop
               echo "bot-token=${{ secrets.TOKEN }}" >> "config.prop"
               echo "bot-username=linuxshitbot" >> "config.prop"
@@ -46,43 +32,18 @@ jobs:
               echo "bot-sf-host=frs.sourceforge.net" >> sf-creds.config
               echo "bot-send-announcement=true" >> sf-creds.config
               echo '["1263663104","1469015383","1032274246","1186205613","522458637","760404389","1179129272","968189873","678206065"]' >> allowed2port.json
-
-       - name: Clone workflow
+       - name: Run Bot3
          continue-on-error: true
-         run: |
-              mkdir tmp && cd tmp
-              git clone https://github.com/berkays0733/Bot3-Workflow Bobot
-
-       - name: Install OpenJDK 8 & other tools/packages
-         continue-on-error: true
-         timeout-minutes: 5
-         run: |
-              sudo -E apt-get -qq update
-              sudo -E apt-get -qq install bc build-essential zip curl libstdc++6 git wget python gcc clang libssl-dev rsync flex bison ccache openjdk-8-jdk expect aria2 unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract file-roller device-tree-compiler liblzma-dev brotli liblz4-tool axel gawk aria2 detox cpio rename build-essential simg2img aria2 python3-pip
-
-       - name: Setup Erfan GSIs Tool
+         timeout-minutes: 350
+         run: sudo java -jar BoboBot.jar
+         
+       - name: Loop workflow
          continue-on-error: true
          timeout-minutes: 1
          run: |
-              git clone --recurse-submodules https://github.com/berkays0733/ShadesGsi ErfanGSIs --depth 1
-              pip3 install wheel setuptools
-              pip3 install backports.lzma docopt zstandard bsdiff4 protobuf pycrypto
-              sudo pip3 install --upgrade protobuf
-
-       - name: Build & Run Bot3 source
-         continue-on-error: true
-         timeout-minutes: 350
-         run: |
-              export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-              export PATH=$PATH:$JAVA_HOME/bin
-              sudo dpkg --purge --force-depends ca-certificates-java
-              sudo apt-get install ca-certificates-java -y
-              cd Bot3
-              ./gradlew shadowJar
-              cd ../; mv Bot3/build/libs/*.jar BoboBot.jar
-              rm -rf Bot3
-              sudo java -jar BoboBot.jar
-
+              cd tmp/Kurata-Yui
+              git commit --allow-empty -m "(LOOP): Make a forced loop"
+              
        - name: Reruns
          continue-on-error: true
          timeout-minutes: 5
