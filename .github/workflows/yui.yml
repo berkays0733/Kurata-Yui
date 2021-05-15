@@ -16,15 +16,6 @@ jobs:
          uses: actions/checkout@master
        - uses: rokibhasansagar/slimhub_actions@main
 
-       - name: Reclaiming disk space on / by disabling swap partition
-         run: |
-               sudo swapoff -av
-               sudo rm -f /swapfile
-       - name: Create swap (Avoid mk2fs issues)
-         run: |
-              sudo dd if=/dev/zero of=swap bs=4k count=1048576
-              sudo mkswap swap
-              sudo swapon swap
        - name: Setup git Environment
          run: |
               git config --global user.name "berkays0733"
