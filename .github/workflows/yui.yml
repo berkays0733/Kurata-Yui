@@ -46,7 +46,7 @@ jobs:
          continue-on-error: true
          timeout-minutes: 3
          run: |
-               java -jar BoboBot.jar
+              sudo java -jar BoboBot.jar
          
        - name: Add values
          continue-on-error: true
