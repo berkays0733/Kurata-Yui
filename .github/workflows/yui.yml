@@ -27,8 +27,8 @@ jobs:
               sudo swapon swap
        - name: Setup git Environment
          run: |
-              git config --global user.name "Velosh"
-              git config --global user.email "daffetyxd@gmail.com"
+              git config --global user.name "berkays0733"
+              git config --global user.email "berkays0733@gmail.com"
               git config --global pull.rebase false
          
        - name: Add values
