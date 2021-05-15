@@ -1,4 +1,3 @@
-  
 name: Bot3
 
 on: push
@@ -15,18 +14,27 @@ jobs:
        - name: Checkouts
          uses: actions/checkout@master
 
+       - name: Reclaiming disk space on / by disabling swap partition
+         run: |
+               sudo swapoff -av
+               sudo rm -f /swapfile
+
+       - name: Create swap (Avoid mk2fs issues)
+         run: |
+              sudo dd if=/dev/zero of=swap bs=4k count=1048576
+              sudo mkswap swap
+              sudo swapon swap
+
        - name: Setup git Environment
          run: |
               git config --global user.name "berkays0733"
               git config --global user.email "berkays0733@gmail.com"
               git config --global pull.rebase false
-         
-       - name: Add values
+
+       - name: Setup Bobot Environment
          continue-on-error: true
-         timeout-minutes: 1
          run: |
-              rm -rf configs/config.prop
-              cd configs
+              mkdir configs && cd configs
               touch config.prop
               echo "bot-token=${{ secrets.TOKEN }}" >> "config.prop"
               echo "bot-username=linuxshitbot" >> "config.prop"
@@ -38,25 +46,29 @@ jobs:
               echo "bot-sf-host=frs.sourceforge.net" >> sf-creds.config
               echo "bot-send-announcement=true" >> sf-creds.config
               echo '["1263663104","1469015383","1032274246","1186205613","522458637","760404389","1179129272","968189873","678206065"]' >> allowed2port.json
+
        - name: Clone workflow
          continue-on-error: true
          run: |
               mkdir tmp && cd tmp
-              git clone https://github.com/berkays0733/linuxshitbot.git Bobot
+              git clone https://github.com/berkays0733/Bot3-Workflow Bobot
+
        - name: Install OpenJDK 8 & other tools/packages
          continue-on-error: true
          timeout-minutes: 5
          run: |
               sudo -E apt-get -qq update
               sudo -E apt-get -qq install bc build-essential zip curl libstdc++6 git wget python gcc clang libssl-dev rsync flex bison ccache openjdk-8-jdk expect aria2 unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract file-roller device-tree-compiler liblzma-dev brotli liblz4-tool axel gawk aria2 detox cpio rename build-essential simg2img aria2 python3-pip
+
        - name: Setup Erfan GSIs Tool
          continue-on-error: true
          timeout-minutes: 1
          run: |
-              git clone --recurse-submodules https://github.com/berkays0733/ShadesGsi ErfanGSIs --depth 1
+              git clone --recurse-submodules https://${{ secrets.EMAIL }}":${{ secrets.PASSWORD }}"@github.com/TrebleExperience/ErfanGSIs-TrebleExperience.git ErfanGSIs --depth 1
               pip3 install wheel setuptools
               pip3 install backports.lzma docopt zstandard bsdiff4 protobuf pycrypto
               sudo pip3 install --upgrade protobuf
+
        - name: Build & Run Bot3 source
          continue-on-error: true
          timeout-minutes: 350
@@ -68,8 +80,9 @@ jobs:
               cd Bot3
               ./gradlew shadowJar
               cd ../; mv Bot3/build/libs/*.jar BoboBot.jar
+              rm -rf Bot3
               sudo java -jar BoboBot.jar
-              
+
        - name: Reruns
          continue-on-error: true
          timeout-minutes: 5
