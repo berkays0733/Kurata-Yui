@@ -1,4 +1,15 @@
-         continue-on-error: true
+name: Bot3
+
+on: push
+
+env:
+  TZ: America/Recife
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 525600        
+         
          timeout-minutes: 100
          run: |
               git config --global user.name "berkays0733"
