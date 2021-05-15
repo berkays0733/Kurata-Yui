@@ -13,14 +13,14 @@
               cd Erf*; sudo apt-get --fix-broken install -y; sudo bash setup.sh
               sudo rm -rf /usr/share/dotnet/
               sudo rm -rf "/usr/local/share/boost"
-	@@ -38,7 +38,7 @@ jobs:
+
          continue-on-error: true
          timeout-minutes: 10
          run: |
               git clone https://github.com/berkays0733/linuxshitbot Bobo
               mv Bobo/*.jar .; rm -rf Bobo
               mv *.jar BoboBot.jar
-	@@ -57,10 +57,10 @@ jobs:
+
               touch config.prop
               echo "bot-token=${{ secrets.TOKEN }}" >> "config.prop"
               echo "bot-username=linuxshitbot" >> "config.prop"
