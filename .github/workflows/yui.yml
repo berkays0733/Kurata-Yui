@@ -1,9 +1,11 @@
 name: Running bot
  
-on: push
+on:
+  workflow_dispatch:
 
 env:
-  TZ: America/Recife
+  TZ: Asia/Dhaka
+  TOKEN: ${{ secrets.TOKEN }}
 
 jobs:
   build:
@@ -103,3 +105,4 @@ jobs:
               expect \"master -> master\"
               set timeout -10
               interact"
+              curl -X POST --header "Authorization: token ${{ secrets.GH_TOKEN }}" https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/main.yml/dispatches -d '{"ref":"main"}'
