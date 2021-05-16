@@ -9,10 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 525600
-
-    steps:
-       - name: Checkouts
-         uses: actions/checkout@master
          
        - name: Initializing environments
          continue-on-error: true
