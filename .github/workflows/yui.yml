@@ -1,7 +1,6 @@
 name: Running bot
  
-on:
-  workflow_dispatch:
+on: push
 
 env:
   TZ: Asia/Dhaka
