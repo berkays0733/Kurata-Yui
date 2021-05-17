@@ -14,7 +14,6 @@ jobs:
     steps:
        - name: Checkouts
          uses: actions/checkout@master
-       - uses: rokibhasansagar/slimhub_actions@main
 
 
        - name: Reclaiming disk space on / by disabling swap partition
